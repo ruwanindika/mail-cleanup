@@ -34,6 +34,9 @@ resource "aws_lambda_function" "email_cleanup_lambda" {
 
   runtime = "python3.13"
 
+  layers = [aws_lambda_layer_version.gmail_api_lib.arn]
+
+
   environment {
     variables = {
       ENVIRONMENT = "production"
@@ -45,4 +48,12 @@ resource "aws_lambda_function" "email_cleanup_lambda" {
     Environment = "production"
     Application = "email_cleanup_lambda"
   }
+}
+
+# lambda layer 
+resource "aws_lambda_layer_version" "gmail_api_lib" {
+  filename   = "${path.module}/../dependencies/lambda_layer_payload.zip"
+  layer_name = "gmail_api_lib"
+
+  compatible_runtimes = ["python3.13"]
 }
