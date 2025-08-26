@@ -1,19 +1,24 @@
-# Use the official Node.js:lst runtime as a base image
-FROM ubuntu:24.04
-# Install nvm with node and npm
-# RUN apt update
-# RUN apt -y install nodejs
-# RUN apt -y install nodejs npm
-# RUN npm install -g aws-cdk@2.0
-# RUN npm -g install typescript
-# RUN npm -g install aws-cdk
-# RUN apt update
-# RUN apt -y install curl
-# RUN apt -y install awscli
-# RUN npm -g install --save-dev @cucumber/cucumber
-# RUN npm install -g aws-cdk-lib
-# RUN npm install -g ts-node@10.9.2 --save-devssss
-# RUN npm i -g @aws-cdk/aws-ec2
-# RUN npm install -g ts-node --save-dev
-# RUN npm install typescript -g 
-# RUN npm install -g typescript --save-dev
+# Use a base Ubuntu image
+FROM ubuntu:latest
+
+# Update packages and install necessary dependencies
+RUN apt-get update && \
+    apt-get install -y software-properties-common gnupg2 curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Add HashiCorp GPG key
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+
+# Add HashiCorp repository
+RUN apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+
+# Update package list again and install Terraform
+RUN apt-get update && \
+    apt-get install -y terraform
+
+# Verify the installation
+RUN terraform version
+
+RUN apt install python3-pip -y
+
+RUN apt install zip -y
