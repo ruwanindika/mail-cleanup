@@ -20,5 +20,3 @@ RUN apt-get update && \
 RUN terraform version
 
 RUN apt install python3-pip -y
-
-RUN apt install zip -y

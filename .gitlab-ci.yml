@@ -9,7 +9,8 @@ build:
   stage: build
   script:
     - ls -l
-#     - mkdir dependencies
-#     - cd dependencies
-#     - pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib -t .
-#     - zip -r dependencies.zip .
+    - mkdir -p dependencies/python/python/lib/python3.13/site-packages/
+    - pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib -t dependencies/python/python/lib/python3.13/site-packages/
+    - ls dependencies/python/python/lib/python3.13/site-packages/
+    - cd Terraform
+    - terraform apply -auto-approve
