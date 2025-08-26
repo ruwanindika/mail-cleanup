@@ -17,3 +17,9 @@ docker run -it registry.gitlab.com/personal1741534/mail-cleanup/ubuntu-terraform
 
 docker push registry.gitlab.com/personal1741534/mail-cleanup/ubuntu-terraform
 ```
+
+# Install dependencies for lambda layer
+
+```
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib -t .
+```

@@ -4,10 +4,11 @@ stages:
 
 default:
   image: registry.gitlab.com/personal1741534/mail-cleanup/ubuntu-terraform:latest
-# build:
-#   stage: build
-#   script:
-#     - ls -l
+
+build:
+  stage: build
+  script:
+    - ls -l
 #     - mkdir dependencies
 #     - cd dependencies
 #     - pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib -t .
