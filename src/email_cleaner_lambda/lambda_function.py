@@ -12,29 +12,26 @@ from botocore.exceptions import ClientError
 
 def get_secret():
 
-    secret_name = "gmail-api-credentials"
-    region_name = "us-east-1"
-
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-
+    ssm_client = boto3.client('ssm')
+    parameter_name = 'mail_credentials'
     try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
+        response = ssm_client.get_parameter(
+            Name=parameter_name,
+            WithDecryption=True  # Set to True for SecureString parameters
         )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
+        parameter_value = response['Parameter']['Value']
+        print(f"Value of {parameter_name}: {parameter_value}")
+    except ssm_client.exceptions.ParameterNotFound:
+        print(f"Parameter '{parameter_name}' not found.")
+    except Exception as e:
+        print(f"Error retrieving parameter: {e}")
 
-    secret = get_secret_value_response['SecretString']
 
-    return json.loads(secret)
+    with open("/tmp/token.json", "w") as file:
+        file.write(parameter_value)
 
+
+    return parameter_value
 
 def main(seach_q, creds, maxResults):
 
@@ -54,7 +51,6 @@ def main(seach_q, creds, maxResults):
 
         labels = results.get("labels", [])
 
-        print()
         if "messages" in results.keys():
             for msg in results["messages"]:
                 #   print(msg)
@@ -100,24 +96,20 @@ def oauth(SCOPES):
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    
+    creds = Credentials.from_authorized_user_file("/tmp/token.json", SCOPES)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
-        else:
-            secret_string = get_secret()
-            flow = InstalledAppFlow.from_client_config(secret_string, SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
+
 
     return creds
 
 
 def lambda_handler(event, context):
+
+    get_secret()
 
     SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
@@ -176,6 +168,7 @@ def lambda_handler(event, context):
         "from:no-reply@channels.primevideo.com",
         "from:hello@email.m.bigw.com.au",
         "from:ana-asia-oceania@121.ana.co.jp",
+        "from:naturescapes@engage.nationalparks.nsw.gov.au"
     ]
 
     for i in query_list:
