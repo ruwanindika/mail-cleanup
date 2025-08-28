@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "lambda_assum_role_policy" {
 
     principals {
       type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
+      identifiers = ["lambda.amazonaws.com","scheduler.amazonaws.com"]
     }
 
     actions = ["sts:AssumeRole"]
@@ -20,7 +20,7 @@ resource "aws_iam_role" "email_cleanup_lambda_role" {
 }
 
 resource "aws_iam_policy" "ssm_parameter_access_policy" {
-  name        = "ssm-parameter-read-policy"
+  name        = "ssm-parameter-read-write-policy"
   description = "IAM policy to allow read access to specific SSM parameters"
   policy      = jsonencode({
     Version = "2012-10-17"
@@ -30,7 +30,8 @@ resource "aws_iam_policy" "ssm_parameter_access_policy" {
         Action = [
           "ssm:GetParameter",
           "ssm:GetParameters",
-          "ssm:GetParametersByPath"
+          "ssm:GetParametersByPath",
+          "ssm:PutParameter"
         ]
         Resource = "arn:aws:ssm:us-east-1:161580273020:parameter/mail_credentials"
       }
@@ -38,9 +39,32 @@ resource "aws_iam_policy" "ssm_parameter_access_policy" {
   })
 }
 
+
+
 resource "aws_iam_role_policy_attachment" "attach_ssm_policy_to_role" {
   role       = aws_iam_role.email_cleanup_lambda_role.name
   policy_arn = aws_iam_policy.ssm_parameter_access_policy.arn
+}
+
+
+resource "aws_iam_role_policy_attachment" "attach_eventbridge_policy_to_role" {
+  role       = aws_iam_role.email_cleanup_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+
+# Event bridge scheduler
+resource "aws_scheduler_schedule" "lambda_fn_schedule" {
+  name                = "my-daily-lambda-schedule"
+  schedule_expression = "cron(30 13 * * ? *)"
+  flexible_time_window {
+    mode = "FLEXIBLE"
+    maximum_window_in_minutes = 15
+  }
+  target {
+    arn      = aws_lambda_function.email_cleanup_lambda.arn
+    role_arn = aws_iam_role.email_cleanup_lambda_role.arn
+  }
 }
 
 # Package the Lambda function code
@@ -76,6 +100,12 @@ resource "aws_lambda_function" "email_cleanup_lambda" {
     Environment = "production"
     Application = "email_cleanup_lambda"
   }
+}
+
+# log retention
+resource "aws_cloudwatch_log_group" "my_lambda_log_group" {
+  name              = "/aws/lambda/${aws_lambda_function.email_cleanup_lambda.function_name}"
+  retention_in_days = 7
 }
 
 # Package the Lambda layer 

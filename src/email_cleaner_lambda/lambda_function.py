@@ -1,37 +1,51 @@
-import os.path
 import json
 
+import boto3
+from botocore.exceptions import ClientError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-import boto3
-from botocore.exceptions import ClientError
 
-def get_secret():
+def update_token_in_parameter_store(ssm_client, new_value):
+    parameter_name = "mail_credentials"
 
-    ssm_client = boto3.client('ssm')
-    parameter_name = 'mail_credentials'
+    parameter_type = "SecureString"
+
+    try:
+        response = ssm_client.put_parameter(
+            Name=parameter_name,
+            Value=new_value,
+            Type=parameter_type,
+            Overwrite=True,  # Set to True to update an existing parameter
+        )
+        print(
+            f"Parameter '{parameter_name}' updated successfully. Version: {response['Version']}"
+        )
+        return {"statusCode": 200, "body": f"Parameter '{parameter_name}' updated."}
+    except Exception as e:
+        print(f"Error updating parameter: {e}")
+        return {"statusCode": 500, "body": f"Error updating parameter: {e}"}
+
+
+def get_secret(ssm_client):
+
+    parameter_name = "mail_credentials"
     try:
         response = ssm_client.get_parameter(
             Name=parameter_name,
-            WithDecryption=True  # Set to True for SecureString parameters
+            WithDecryption=True,  # Set to True for SecureString parameters
         )
-        parameter_value = response['Parameter']['Value']
-        print(f"Value of {parameter_name}: {parameter_value}")
+        parameter_value = response["Parameter"]["Value"]
     except ssm_client.exceptions.ParameterNotFound:
         print(f"Parameter '{parameter_name}' not found.")
     except Exception as e:
         print(f"Error retrieving parameter: {e}")
 
-
-    with open("/tmp/token.json", "w") as file:
-        file.write(parameter_value)
-
-
     return parameter_value
+
 
 def main(seach_q, creds, maxResults):
 
@@ -45,15 +59,11 @@ def main(seach_q, creds, maxResults):
             .list(userId="me", maxResults=maxResults, q=seach_q)
             .execute()
         )
-        # results2 = service.users().getProfile(userId="me").execute()
-        # result_messages = service.users().messages().list(userId="me",maxResults=10).execute()
-        # result_filter = service.users().settings().filters().list(userId="me").execute()
 
         labels = results.get("labels", [])
 
         if "messages" in results.keys():
             for msg in results["messages"]:
-                #   print(msg)
                 list_emails_results = (
                     service.users().messages().get(userId="me", id=msg["id"]).execute()
                 )
@@ -67,6 +77,7 @@ def main(seach_q, creds, maxResults):
                         email_from = i["value"]
 
                 print(f"{email_from} --> {email_subject}")
+                print()
 
                 del_results = (
                     service.users()
@@ -74,7 +85,8 @@ def main(seach_q, creds, maxResults):
                     .trash(userId="me", id=msg["id"])
                     .execute()
                 )
-                # print(del_results)
+
+                print(del_results)
                 print()
 
             if not labels:
@@ -91,31 +103,30 @@ def main(seach_q, creds, maxResults):
         print(f"An error occurred: {error}")
 
 
-def oauth(SCOPES):
+def oauth(SCOPES, parameter_value):
     creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    
-    creds = Credentials.from_authorized_user_file("/tmp/token.json", SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
+
+    creds = Credentials.from_authorized_user_info(json.loads(parameter_value), SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
-
 
     return creds
 
 
 def lambda_handler(event, context):
 
-    get_secret()
+    ssm_client = boto3.client("ssm")
+
+    parameter_value = get_secret(ssm_client)
 
     SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
-    creds = oauth(SCOPES)
+    creds = oauth(SCOPES, parameter_value)
 
-    maxResults = 5000
+    update_token_in_parameter_store(ssm_client, creds.to_json())
+
+    maxResults = 500
 
     query_list = [
         "from:Rewards@email.dansnews.com.au",
@@ -125,8 +136,6 @@ def lambda_handler(event, context):
         "from:mail@sg.rentalcars.com",
         "from:info@dailystoic.com",
         "from:subscriptions@message.bloomberg.com",
-        "from:scott.r.baxter@raywhite.com",
-        "from:webmaster@tutorialspoint.com",
         "from:boconlinebanking@boc.lk",
         "from:developer@insideapple.apple.com",
         "from:hi@io.hatch.team",
@@ -138,24 +147,12 @@ def lambda_handler(event, context):
         "from:noreply@glassdoor.com",
         "from:noreply@ondemandmsg.sbs.com.au",
         "from:HGOneRewards@mc.ihg.com",
-        "from:Coursera@m.learn.coursera.org",
         "from:jobalerts-noreply@linkedin.com",
         "from:eBay@e.reply.ebay.com.au",
-        "from:email@e.livingsocial.com.au",
-        "from:msgalert@whereareyounow.com",
-        "from:benjamin@authenticeducation.com.au",
         "from:velocity@email.velocityfrequentflyer.com",
         "from:no-reply@news.spotifymail.com",
-        "from:notification+mihpmuki@facebookmail.com",
-        "from:tagged@taggedmail.com",
         "from:arnesandNobleEmail@email.bn.com",
-        "from:mail@messaging.zoosk.com",
-        "from:info@twitter.com",
-        "from:noreply@r.grouponmail.com.au",
-        "from:email@e.ourdeal.com.au",
-        "from:news@n.anything.lk",
         "from:newsletters@cnet.online.com",
-        "from:mapmyfitness@mapmyfitness.underarmour.com",
         "from:info@mailer.netflix.com",
         "from:comment-reply@wordpress.com",
         "from:no-reply@primevideo.com",
@@ -168,7 +165,8 @@ def lambda_handler(event, context):
         "from:no-reply@channels.primevideo.com",
         "from:hello@email.m.bigw.com.au",
         "from:ana-asia-oceania@121.ana.co.jp",
-        "from:naturescapes@engage.nationalparks.nsw.gov.au"
+        "from:naturescapes@engage.nationalparks.nsw.gov.au",
+        "from:notification@facebookmail.com",
     ]
 
     for i in query_list:
