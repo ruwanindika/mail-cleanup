@@ -15,3 +15,14 @@ build:
     - cd Terraform
     - terraform init
     - terraform apply -auto-approve
+  artifacts:
+    paths:
+      - /builds/personal1741534/mail-cleanup/*
+    expire_in: 1h
+
+deploy:
+  stage: deploy
+  script:
+    - cd Terraform
+    - terraform init
+    - terraform apply -auto-approve
