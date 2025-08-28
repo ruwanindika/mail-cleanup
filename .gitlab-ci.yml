@@ -10,11 +10,6 @@ build:
   script:
     - mkdir -p dependencies/python/python/lib/python3.13/site-packages/
     - pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib -t dependencies/python/python/lib/python3.13/site-packages/
-    - ls
-    - pwd
-    - cd Terraform
-    - terraform init
-    - terraform apply -auto-approve
   artifacts:
     paths:
       - /builds/personal1741534/mail-cleanup/*
