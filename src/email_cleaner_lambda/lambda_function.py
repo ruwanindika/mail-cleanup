@@ -47,10 +47,11 @@ def get_secret(ssm_client):
     return parameter_value
 
 
-def main(seach_q, creds, maxResults):
+def search_and_delete(seach_q, creds, maxResults):
+
+    number_of_emails_deleted = 0
 
     try:
-        # Call the Gmail API
 
         service = build("gmail", "v1", credentials=creds)
         results = (
@@ -59,8 +60,6 @@ def main(seach_q, creds, maxResults):
             .list(userId="me", maxResults=maxResults, q=seach_q)
             .execute()
         )
-
-        labels = results.get("labels", [])
 
         if "messages" in results.keys():
             for msg in results["messages"]:
@@ -86,21 +85,20 @@ def main(seach_q, creds, maxResults):
                     .execute()
                 )
 
+                if del_results:
+                    number_of_emails_deleted = number_of_emails_deleted + 1
+
+
                 print(del_results)
                 print()
 
-            if not labels:
-                print("No labels found.")
-                return
-            print("Labels:")
-            for label in labels:
-                print(label["name"])
         else:
             print(f"No messages for : {seach_q}")
 
     except HttpError as error:
-        # TODO(developer) - Handle errors from gmail API.
         print(f"An error occurred: {error}")
+
+    return number_of_emails_deleted
 
 
 def oauth(SCOPES, parameter_value):
@@ -115,6 +113,8 @@ def oauth(SCOPES, parameter_value):
 
 
 def lambda_handler(event, context):
+
+    number_of_emails_deleted = 0
 
     ssm_client = boto3.client("ssm")
 
@@ -170,4 +170,9 @@ def lambda_handler(event, context):
     ]
 
     for i in query_list:
-        main(i, creds, maxResults)
+        mails_deleted = search_and_delete(i, creds, maxResults)
+
+        number_of_emails_deleted = number_of_emails_deleted + mails_deleted
+
+
+    print(f"Number of emails deleted : {number_of_emails_deleted}")
