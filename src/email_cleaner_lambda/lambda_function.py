@@ -8,6 +8,42 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+def send_email(body_text):
+    ses_client = boto3.client('ses')
+
+    sender_email = "ruwanindika@gmail.com"
+    recipient_email = "recipient@example.com"
+    subject = "Email deletion report"
+
+    try:
+        response = ses_client.send_email(
+            Source=sender_email,
+            Destination={
+                'ToAddresses': ["ruwanindika@gmail.com"]
+            },
+            Message={
+                'Subject': {
+                    'Data': subject
+                },
+                'Body': {
+                    'Text': {
+                        'Data': body_text
+                    }
+                }
+            }
+        )
+        print(f"Email sent! Message ID: {response['MessageId']}")
+        return {
+            'statusCode': 200,
+            'body': 'Email sent successfully!'
+        }
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return {
+            'statusCode': 500,
+            'body': f'Error sending email: {e}'
+        }
+
 
 def update_token_in_parameter_store(ssm_client, new_value):
     parameter_name = "mail_credentials"
@@ -176,3 +212,5 @@ def lambda_handler(event, context):
 
 
     print(f"Number of emails deleted : {number_of_emails_deleted}")
+
+    send_email(f"Number of emails deleted : {number_of_emails_deleted}")

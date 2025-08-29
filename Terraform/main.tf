@@ -39,7 +39,23 @@ resource "aws_iam_policy" "ssm_parameter_access_policy" {
   })
 }
 
-
+resource "aws_iam_policy" "ses_send_email_policy" {
+  name        = "ses_send_email_policy"
+  description = "IAM policy to allowses_send_email_policy"
+  policy      = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
 
 resource "aws_iam_role_policy_attachment" "attach_ssm_policy_to_role" {
   role       = aws_iam_role.email_cleanup_lambda_role.name
@@ -52,6 +68,10 @@ resource "aws_iam_role_policy_attachment" "attach_eventbridge_policy_to_role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "attach_ses_policy_to_role" {
+  role       = aws_iam_role.email_cleanup_lambda_role.name
+  policy_arn = aws_iam_policy.ses_send_email_policy.arn
+}
 
 # Event bridge scheduler
 resource "aws_scheduler_schedule" "lambda_fn_schedule" {
