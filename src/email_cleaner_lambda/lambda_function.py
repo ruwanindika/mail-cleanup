@@ -169,8 +169,8 @@ def lambda_handler(event, context):
     query_list = [
         "from:Rewards@email.dansnews.com.au",
         "from:noreply@redditmail.com",
-        "from:ouchi-sagashi@openhouse-group.com",
-        "from:mailrobot@internations.org",
+        "from:openhouse-group.com",
+        "from:Sandaru.Gunasekara@sgs.com",
         "from:mail@sg.rentalcars.com",
         "from:info@dailystoic.com",
         "from:subscriptions@message.bloomberg.com",
