@@ -57,6 +57,26 @@ resource "aws_iam_policy" "ses_send_email_policy" {
   })
 }
 
+resource "aws_iam_policy" "lambda_execution_policy" {
+  name        = "lambda_execution_policy"
+  description = "IAM policy to lambda_execution_policy"
+  policy      = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": [
+                "arn:aws:lambda:us-east-1:161580273020:function:email_cleanup_lambda:*",
+                "arn:aws:lambda:us-east-1:161580273020:function:email_cleanup_lambda"
+            ]
+        }
+    ]
+})
+}
+
 resource "aws_iam_role_policy_attachment" "attach_ssm_policy_to_role" {
   role       = aws_iam_role.email_cleanup_lambda_role.name
   policy_arn = aws_iam_policy.ssm_parameter_access_policy.arn
@@ -73,10 +93,16 @@ resource "aws_iam_role_policy_attachment" "attach_ses_policy_to_role" {
   policy_arn = aws_iam_policy.ses_send_email_policy.arn
 }
 
+resource "aws_iam_role_policy_attachment" "attach_lambda_execution_role" {
+  role       = aws_iam_role.email_cleanup_lambda_role.name
+  policy_arn = aws_iam_policy.lambda_execution_policy.arn
+}
+
+
 # Event bridge scheduler
 resource "aws_scheduler_schedule" "lambda_fn_schedule" {
   name                = "my-daily-lambda-schedule"
-  schedule_expression = "cron(45 13 * * ? *)"
+  schedule_expression = "cron(10 06 * * ? *)"
   schedule_expression_timezone = "Australia/Sydney"
   flexible_time_window {
     mode = "FLEXIBLE"
