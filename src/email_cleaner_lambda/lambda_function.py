@@ -149,6 +149,8 @@ def oauth(SCOPES, parameter_value):
 
 
 def lambda_handler(event, context):
+    
+    email_report_list = []  
 
     number_of_emails_deleted = 0
 
@@ -209,8 +211,14 @@ def lambda_handler(event, context):
         mails_deleted = search_and_delete(i, creds, maxResults)
 
         number_of_emails_deleted = number_of_emails_deleted + mails_deleted
+        
+        if mails_deleted>0:
+            email_report_list.append({"filter":i,"deleted":mails_deleted})
 
 
     print(f"Number of emails deleted : {number_of_emails_deleted}")
 
-    send_email(f"Number of emails deleted : {number_of_emails_deleted}")
+
+    email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{str(email_report_list)}"
+    
+    send_email(email_string)

@@ -76,7 +76,8 @@ resource "aws_iam_role_policy_attachment" "attach_ses_policy_to_role" {
 # Event bridge scheduler
 resource "aws_scheduler_schedule" "lambda_fn_schedule" {
   name                = "my-daily-lambda-schedule"
-  schedule_expression = "cron(30 13 * * ? *)"
+  schedule_expression = "cron(30 6 * * ? *)"
+  schedule_expression_timezone = "Australia/Sydney"
   flexible_time_window {
     mode = "FLEXIBLE"
     maximum_window_in_minutes = 15
