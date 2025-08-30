@@ -190,7 +190,7 @@ def lambda_handler(event, context):
         "from:velocity@email.velocityfrequentflyer.com",
         "from:no-reply@news.spotifymail.com",
         "from:arnesandNobleEmail@email.bn.com",
-        "from:newsletters@cnet.online.com",
+        "from:eservice@mh1.evaair.com",
         "from:info@mailer.netflix.com",
         "from:comment-reply@wordpress.com",
         "from:no-reply@primevideo.com",
@@ -205,6 +205,7 @@ def lambda_handler(event, context):
         "from:ana-asia-oceania@121.ana.co.jp",
         "from:naturescapes@engage.nationalparks.nsw.gov.au",
         "from:notification@facebookmail.com",
+        "from:sampathotp@sampath.lk"
     ]
 
     for i in query_list:
