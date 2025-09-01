@@ -205,7 +205,8 @@ def lambda_handler(event, context):
         "from:ana-asia-oceania@121.ana.co.jp",
         "from:naturescapes@engage.nationalparks.nsw.gov.au",
         "from:notification@facebookmail.com",
-        "from:sampathotp@sampath.lk"
+        "from:sampathotp@sampath.lk",
+        "subject: email deletion report from:ruwanindika@gmail.com to:ruwanindika@gmail.com"
     ]
 
     for i in query_list:
