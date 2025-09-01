@@ -1,15 +1,16 @@
+import base64
 import json
+from email.message import EmailMessage
 
 import boto3
-from botocore.exceptions import ClientError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-def send_email(body_text):
-    ses_client = boto3.client('ses')
+
+def send_email_aws(body_text):
+    ses_client = boto3.client("ses")
 
     sender_email = "ruwanindika@gmail.com"
     recipient_email = "recipient@example.com"
@@ -18,31 +19,17 @@ def send_email(body_text):
     try:
         response = ses_client.send_email(
             Source=sender_email,
-            Destination={
-                'ToAddresses': ["ruwanindika@gmail.com"]
-            },
+            Destination={"ToAddresses": ["ruwanindika@gmail.com"]},
             Message={
-                'Subject': {
-                    'Data': subject
-                },
-                'Body': {
-                    'Text': {
-                        'Data': body_text
-                    }
-                }
-            }
+                "Subject": {"Data": subject},
+                "Body": {"Text": {"Data": body_text}},
+            },
         )
         print(f"Email sent! Message ID: {response['MessageId']}")
-        return {
-            'statusCode': 200,
-            'body': 'Email sent successfully!'
-        }
+        return {"statusCode": 200, "body": "Email sent successfully!"}
     except Exception as e:
         print(f"Error sending email: {e}")
-        return {
-            'statusCode': 500,
-            'body': f'Error sending email: {e}'
-        }
+        return {"statusCode": 500, "body": f"Error sending email: {e}"}
 
 
 def update_token_in_parameter_store(ssm_client, new_value):
@@ -124,7 +111,6 @@ def search_and_delete(seach_q, creds, maxResults):
                 if del_results:
                     number_of_emails_deleted = number_of_emails_deleted + 1
 
-
                 print(del_results)
                 print()
 
@@ -148,9 +134,36 @@ def oauth(SCOPES, parameter_value):
     return creds
 
 
+def send_email(creds, email_content):
+
+    try:
+        service = build("gmail", "v1", credentials=creds)
+        message = EmailMessage()
+
+        message.set_content(email_content)
+
+        message["To"] = "ruwanindika@gmail.com"
+        message["From"] = "ruwanindika@gmail.com"
+        message["Subject"] = "email deletion report"
+
+        # encoded message
+        encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+
+        create_message = {"raw": encoded_message}
+        # pylint: disable=E1101
+        send_message = (
+            service.users().messages().send(userId="me", body=create_message).execute()
+        )
+        print(f'Message Id: {send_message["id"]}')
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        send_message = None
+    return send_message
+
+
 def lambda_handler(event, context):
-    
-    email_report_list = []  
+
+    email_report_list = []
 
     number_of_emails_deleted = 0
 
@@ -206,23 +219,20 @@ def lambda_handler(event, context):
         "from:naturescapes@engage.nationalparks.nsw.gov.au",
         "from:notification@facebookmail.com",
         "from:sampathotp@sampath.lk",
-        "subject: email deletion report from:ruwanindika@gmail.com to:ruwanindika@gmail.com",
         "from:carsales@mail.carsales.com.au",
-        "from:Coursera@email.coursera.org"
+        "from:Coursera@email.coursera.org",
     ]
 
     for i in query_list:
         mails_deleted = search_and_delete(i, creds, maxResults)
 
         number_of_emails_deleted = number_of_emails_deleted + mails_deleted
-        
-        if mails_deleted>0:
-            email_report_list.append({"filter":i,"deleted":mails_deleted})
 
+        if mails_deleted > 0:
+            email_report_list.append({"filter": i, "deleted": mails_deleted})
 
     print(f"Number of emails deleted : {number_of_emails_deleted}")
 
-
     email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{str(email_report_list)}"
-    
-    send_email(email_string)
+
+    send_email(creds, email_string)
