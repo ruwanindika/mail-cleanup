@@ -219,6 +219,7 @@ def lambda_handler(event, context):
         "from:naturescapes@engage.nationalparks.nsw.gov.au",
         "from:notification@facebookmail.com",
         "from:sampathotp@sampath.lk",
+        "subject: email deletion report from:ruwanindika@gmail.com to:ruwanindika@gmail.com",
         "from:carsales@mail.carsales.com.au",
         "from:Coursera@email.coursera.org",
     ]
