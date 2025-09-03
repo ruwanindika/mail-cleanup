@@ -98,8 +98,8 @@ def search_and_delete(seach_q, creds, maxResults):
                     if i["name"] == "From":
                         email_from = i["value"]
 
-                print(f"{email_from} --> {email_subject}")
-                print()
+                # print(f"{email_from} --> {email_subject}")
+                # print()
 
                 del_results = (
                     service.users()
@@ -154,7 +154,7 @@ def send_email(creds, email_content):
         send_message = (
             service.users().messages().send(userId="me", body=create_message).execute()
         )
-        print(f'Message Id: {send_message["id"]}')
+        # print(f'Message Id: {send_message["id"]}')
     except HttpError as error:
         print(f"An error occurred: {error}")
         send_message = None
