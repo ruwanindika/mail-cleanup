@@ -200,7 +200,7 @@ def lambda_handler(event, context):
         "from:HGOneRewards@mc.ihg.com",
         "from:jobalerts-noreply@linkedin.com",
         "from:eBay@e.reply.ebay.com.au",
-        "from:velocity@email.velocityfrequentflyer.com",
+        "from:velocity@e.velocityfrequentflyer.com",
         "from:no-reply@news.spotifymail.com",
         "from:arnesandNobleEmail@email.bn.com",
         "from:eservice@mh1.evaair.com",
