@@ -222,7 +222,14 @@ def lambda_handler(event, context):
         "subject: email deletion report from:ruwanindika@gmail.com to:ruwanindika@gmail.com",
         "from:carsales@mail.carsales.com.au",
         "from:Coursera@email.coursera.org",
-        "from:shipment-tracking@amazon.com.au"
+        "from:shipment-tracking@amazon.com.au",
+        "from:store-news@amazon.com.au",
+        "from:flybuys@edm.flybuys.com.au",
+        "from:smbc_info@msg.smbc.co.jp",
+        "from:myqinfo@info.chamberlain.com",
+        "from:didi@jp.didiglobal.com",
+        "from:order-update@amazon.com.au",
+        "from:estatement@info.nationstrust.com"
     ]
 
     for i in query_list:

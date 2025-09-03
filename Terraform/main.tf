@@ -102,7 +102,7 @@ resource "aws_iam_role_policy_attachment" "attach_lambda_execution_role" {
 # Event bridge scheduler
 resource "aws_scheduler_schedule" "lambda_fn_schedule" {
   name                = "my-daily-lambda-schedule"
-  schedule_expression = "cron(10 06 * * ? *)"
+  schedule_expression = "cron(10 01 * * ? *)"
   schedule_expression_timezone = "Australia/Sydney"
   flexible_time_window {
     mode = "FLEXIBLE"
