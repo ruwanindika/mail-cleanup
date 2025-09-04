@@ -235,7 +235,10 @@ def lambda_handler(event, context):
         "from:qantasff@e.qantas.com",
         "from:jobs-listings@linkedin.com",
         "from:promotion@aliexpress.com",
-        "from:notifications-noreply@linkedin.com older_than:15d"
+        "from:notifications-noreply@linkedin.com older_than:15d",
+        "from:store-news@amazon.co.jp older_than:15d",
+        "from:shipment-tracking@amazon.co.jp older_than:15d"
+        
     ]
 
     for i in query_list:
