@@ -111,8 +111,8 @@ def search_and_delete(seach_q, creds, maxResults):
                 if del_results:
                     number_of_emails_deleted = number_of_emails_deleted + 1
 
-                print(del_results)
-                print()
+                # print(del_results)
+                # print()
 
         else:
             print(f"No messages for : {seach_q}")
@@ -120,6 +120,8 @@ def search_and_delete(seach_q, creds, maxResults):
     except HttpError as error:
         print(f"An error occurred: {error}")
 
+
+    print("number_of_emails_deleted",number_of_emails_deleted)
     return number_of_emails_deleted
 
 
