@@ -110,11 +110,11 @@ def search_and_delete(seach_q, creds, maxResults):
 
                 if del_results:
                     number_of_emails_deleted = number_of_emails_deleted + 1
-                    
-            print(seach_q, ":",number_of_emails_deleted)
 
-                # print(del_results)
-                # print()
+            print(seach_q, ":", number_of_emails_deleted)
+
+            # print(del_results)
+            # print()
 
         else:
             print(f"No messages for : {seach_q}")
@@ -122,8 +122,6 @@ def search_and_delete(seach_q, creds, maxResults):
     except HttpError as error:
         print(f"An error occurred: {error}")
 
-
-    
     return number_of_emails_deleted
 
 
@@ -239,8 +237,7 @@ def lambda_handler(event, context):
         "from:promotion@aliexpress.com",
         "from:notifications-noreply@linkedin.com older_than:15d",
         "from:store-news@amazon.co.jp older_than:15d",
-        "from:shipment-tracking@amazon.co.jp older_than:15d"
-        
+        "from:shipment-tracking@amazon.co.jp older_than:15d",
     ]
 
     for i in query_list:
@@ -252,13 +249,11 @@ def lambda_handler(event, context):
             email_report_list.append({"filter": i, "deleted": mails_deleted})
 
     print(f"Total Number of emails deleted : {number_of_emails_deleted}")
-    
-    
+
     email_report_string = ""
-    
+
     for j in email_report_list:
-        email_report_string = email_report_string + "\n" + i
-        
+        email_report_string = email_report_string + "\n" + j
 
     email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{email_report_string}"
 
