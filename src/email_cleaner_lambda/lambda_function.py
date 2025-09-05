@@ -110,6 +110,8 @@ def search_and_delete(seach_q, creds, maxResults):
 
                 if del_results:
                     number_of_emails_deleted = number_of_emails_deleted + 1
+                    
+            print(seach_q, ":",number_of_emails_deleted)
 
                 # print(del_results)
                 # print()
@@ -121,7 +123,7 @@ def search_and_delete(seach_q, creds, maxResults):
         print(f"An error occurred: {error}")
 
 
-    print("number_of_emails_deleted",number_of_emails_deleted)
+    
     return number_of_emails_deleted
 
 
@@ -249,7 +251,7 @@ def lambda_handler(event, context):
         if mails_deleted > 0:
             email_report_list.append({"filter": i, "deleted": mails_deleted})
 
-    print(f"Number of emails deleted : {number_of_emails_deleted}")
+    print(f"Total Number of emails deleted : {number_of_emails_deleted}")
 
     email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{str(email_report_list)}"
 
