@@ -250,6 +250,7 @@ def lambda_handler(event, context):
 
         if mails_deleted > 0:
             email_report_list.append({"filter": i, "deleted": mails_deleted})
+            email_report_list.append("\n")
 
     print(f"Total Number of emails deleted : {number_of_emails_deleted}")
 
