@@ -250,10 +250,16 @@ def lambda_handler(event, context):
 
         if mails_deleted > 0:
             email_report_list.append({"filter": i, "deleted": mails_deleted})
-            email_report_list.append("\n")
 
     print(f"Total Number of emails deleted : {number_of_emails_deleted}")
+    
+    
+    email_report_string = ""
+    
+    for j in email_report_list:
+        email_report_string = email_report_string + "\n" + i
+        
 
-    email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{str(email_report_list)}"
+    email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{email_report_string}"
 
     send_email(creds, email_string)
