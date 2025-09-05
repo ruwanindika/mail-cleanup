@@ -253,7 +253,9 @@ def lambda_handler(event, context):
     email_report_string = ""
 
     for j in email_report_list:
-        email_report_string = email_report_string + "\n" + j
+        email_report_string = email_report_string + "\n" + str(j)
+
+    print(email_report_string)
 
     email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{email_report_string}"
 
