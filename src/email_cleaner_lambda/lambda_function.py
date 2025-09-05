@@ -238,6 +238,7 @@ def lambda_handler(event, context):
         "from:notifications-noreply@linkedin.com older_than:15d",
         "from:store-news@amazon.co.jp older_than:15d",
         "from:shipment-tracking@amazon.co.jp older_than:15d",
+        "from:aquinasadmin@aquinas.edu.au"
     ]
 
     for i in query_list:
