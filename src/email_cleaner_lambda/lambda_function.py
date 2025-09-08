@@ -183,10 +183,10 @@ def lambda_handler(event, context):
 
     query_list = [
         "from:Rewards@email.dansnews.com.au",
-        "from:noreply@redditmail.com",
+        "from:jobs@davidcareers.com",
         "from:openhouse-group.com",
         "from:Sandaru.Gunasekara@sgs.com",
-        "from:info@dailystoic.com",
+        "from:webmaster@n.nejm.org",
         "from:subscriptions@message.bloomberg.com",
         "from:boconlinebanking@boc.lk",
         "from:HNBAlerts@hnb.lk",
@@ -239,7 +239,8 @@ def lambda_handler(event, context):
         "from:store-news@amazon.co.jp older_than:15d",
         "from:shipment-tracking@amazon.co.jp older_than:15d",
         "from:aquinasadmin@aquinas.edu.au subject:Schedule Report",
-        "from:no-reply@employmenthero.com subject:Security alert older_than:15d"
+        "from:no-reply@employmenthero.com subject:Security alert older_than:15d",
+        "from:messages-noreply@linkedin.com older_than:15d"
     ]
 
     for i in query_list:
