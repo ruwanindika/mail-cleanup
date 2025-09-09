@@ -230,7 +230,7 @@ def lambda_handler(event, context):
         "from:donotreply@afterpay.com older_than:30d",
         "from auto-confirm@amazon.com.au older_than:15d",
         "from:no-reply@amazon.com.au older_than:15d",
-        "from:noreply@r.groupon.com",
+        "from:email.campaign@sg.booking.com",
         "from:qantasff@e.qantas.com",
         "from:jobs-listings@linkedin.com",
         "from:promotion@aliexpress.com",
