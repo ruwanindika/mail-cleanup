@@ -243,6 +243,7 @@ def lambda_handler(event, context):
         "from:Retail@shinseibank.com older_than:15d",
         "from:contacts@email.woolworthsrewards.com.au older_than:15d",
         "from:eBay@e.reply.ebay.com.au older_than:15d",
+        "from:noreply@youtube.com older_than:30d",
     ]
 
     for i in query_list:
