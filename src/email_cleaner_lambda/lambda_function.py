@@ -240,7 +240,7 @@ def lambda_handler(event, context):
         "from:aquinasadmin@aquinas.edu.au subject:Schedule Report",
         "from:no-reply@employmenthero.com subject:Security alert older_than:15d",
         "from:messages-noreply@linkedin.com older_than:15d",
-        "from:Retail@shinseibank.com older_than:15d",1
+        "from:Retail@shinseibank.com older_than:15d",
         "from:contacts@email.woolworthsrewards.com.au older_than:15d",
         "from:eBay@e.reply.ebay.com.au older_than:15d",
     ]
