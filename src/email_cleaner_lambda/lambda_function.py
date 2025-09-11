@@ -1,6 +1,7 @@
 import base64
 import json
 from email.message import EmailMessage
+from aws_access import get_secret,update_token_in_parameter_store
 
 import boto3
 from google.auth.transport.requests import Request
@@ -9,65 +10,42 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
-def send_email_aws(body_text):
-    ses_client = boto3.client("ses")
+# def update_token_in_parameter_store(ssm_client, new_value):
+#     parameter_name = "mail_credentials"
 
-    sender_email = "ruwanindika@gmail.com"
-    recipient_email = "recipient@example.com"
-    subject = "Email deletion report"
+#     parameter_type = "SecureString"
 
-    try:
-        response = ses_client.send_email(
-            Source=sender_email,
-            Destination={"ToAddresses": ["ruwanindika@gmail.com"]},
-            Message={
-                "Subject": {"Data": subject},
-                "Body": {"Text": {"Data": body_text}},
-            },
-        )
-        print(f"Email sent! Message ID: {response['MessageId']}")
-        return {"statusCode": 200, "body": "Email sent successfully!"}
-    except Exception as e:
-        print(f"Error sending email: {e}")
-        return {"statusCode": 500, "body": f"Error sending email: {e}"}
+#     try:
+#         response = ssm_client.put_parameter(
+#             Name=parameter_name,
+#             Value=new_value,
+#             Type=parameter_type,
+#             Overwrite=True,  # Set to True to update an existing parameter
+#         )
+#         print(
+#             f"Parameter '{parameter_name}' updated successfully. Version: {response['Version']}"
+#         )
+#         return {"statusCode": 200, "body": f"Parameter '{parameter_name}' updated."}
+#     except Exception as e:
+#         print(f"Error updating parameter: {e}")
+#         return {"statusCode": 500, "body": f"Error updating parameter: {e}"}
 
 
-def update_token_in_parameter_store(ssm_client, new_value):
-    parameter_name = "mail_credentials"
+# def get_secret(ssm_client):
 
-    parameter_type = "SecureString"
+#     parameter_name = "mail_credentials"
+#     try:
+#         response = ssm_client.get_parameter(
+#             Name=parameter_name,
+#             WithDecryption=True,  # Set to True for SecureString parameters
+#         )
+#         parameter_value = response["Parameter"]["Value"]
+#     except ssm_client.exceptions.ParameterNotFound:
+#         print(f"Parameter '{parameter_name}' not found.")
+#     except Exception as e:
+#         print(f"Error retrieving parameter: {e}")
 
-    try:
-        response = ssm_client.put_parameter(
-            Name=parameter_name,
-            Value=new_value,
-            Type=parameter_type,
-            Overwrite=True,  # Set to True to update an existing parameter
-        )
-        print(
-            f"Parameter '{parameter_name}' updated successfully. Version: {response['Version']}"
-        )
-        return {"statusCode": 200, "body": f"Parameter '{parameter_name}' updated."}
-    except Exception as e:
-        print(f"Error updating parameter: {e}")
-        return {"statusCode": 500, "body": f"Error updating parameter: {e}"}
-
-
-def get_secret(ssm_client):
-
-    parameter_name = "mail_credentials"
-    try:
-        response = ssm_client.get_parameter(
-            Name=parameter_name,
-            WithDecryption=True,  # Set to True for SecureString parameters
-        )
-        parameter_value = response["Parameter"]["Value"]
-    except ssm_client.exceptions.ParameterNotFound:
-        print(f"Parameter '{parameter_name}' not found.")
-    except Exception as e:
-        print(f"Error retrieving parameter: {e}")
-
-    return parameter_value
+#     return parameter_value
 
 
 def search_and_delete(seach_q, creds, maxResults):
@@ -171,13 +149,13 @@ def lambda_handler(event, context):
 
     ssm_client = boto3.client("ssm")
 
-    parameter_value = get_secret(ssm_client)
+    parameter_value = get_secret("mail_credentials")
 
     SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
     creds = oauth(SCOPES, parameter_value)
 
-    update_token_in_parameter_store(ssm_client, creds.to_json())
+    update_token_in_parameter_store(creds.to_json())
 
     maxResults = 500
 
