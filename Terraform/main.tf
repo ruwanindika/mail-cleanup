@@ -122,7 +122,7 @@ resource "aws_iam_role_policy_attachment" "attach_lambda_execution_role" {
 # Package the Lambda function code
 data "archive_file" "email_cleanup_lambda" {
   type        = "zip"
-  source_file = "${path.module}/../src/email_cleaner_lambda/lambda_function.py"
+  source_dir  = "${path.module}/../src/email_cleaner_lambda"
   output_path = "${path.module}/../src/email_cleaner_lambda/function.zip"
 }
 
