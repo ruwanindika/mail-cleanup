@@ -1,105 +1,5 @@
-import base64
-import json
-from email.message import EmailMessage
-
 import aws_access
 import gmail_api_access
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-
-# def search_and_delete(seach_q, creds, maxResults):
-
-#     number_of_emails_deleted = 0
-
-#     try:
-
-#         service = build("gmail", "v1", credentials=creds)
-#         results = (
-#             service.users()
-#             .messages()
-#             .list(userId="me", maxResults=maxResults, q=seach_q)
-#             .execute()
-#         )
-
-#         if "messages" in results.keys():
-#             for msg in results["messages"]:
-#                 list_emails_results = (
-#                     service.users().messages().get(userId="me", id=msg["id"]).execute()
-#                 )
-
-#                 header_list = list_emails_results["payload"]["headers"]
-#                 for i in header_list:
-#                     if i["name"] == "Subject":
-#                         email_subject = i["value"]
-
-#                     if i["name"] == "From":
-#                         email_from = i["value"]
-
-#                 # print(f"{email_from} --> {email_subject}")
-#                 # print()
-
-#                 del_results = (
-#                     service.users()
-#                     .messages()
-#                     .trash(userId="me", id=msg["id"])
-#                     .execute()
-#                 )
-
-#                 if del_results:
-#                     number_of_emails_deleted = number_of_emails_deleted + 1
-
-#             print(seach_q, ":", number_of_emails_deleted)
-
-#             # print(del_results)
-#             # print()
-
-#         else:
-#             print(f"No messages for : {seach_q}")
-
-#     except HttpError as error:
-#         print(f"An error occurred: {error}")
-
-#     return number_of_emails_deleted
-
-
-# def oauth(SCOPES, parameter_value):
-#     creds = None
-
-#     creds = Credentials.from_authorized_user_info(json.loads(parameter_value), SCOPES)
-#     if not creds or not creds.valid:
-#         if creds and creds.expired and creds.refresh_token:
-#             creds.refresh(Request())
-
-#     return creds
-
-
-# def send_email(creds, email_content):
-
-#     try:
-#         service = build("gmail", "v1", credentials=creds)
-#         message = EmailMessage()
-
-#         message.set_content(email_content)
-
-#         message["To"] = "ruwanindika@gmail.com"
-#         message["From"] = "ruwanindika@gmail.com"
-#         message["Subject"] = "email deletion report"
-
-#         # encoded message
-#         encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
-
-#         create_message = {"raw": encoded_message}
-#         # pylint: disable=E1101
-#         send_message = (
-#             service.users().messages().send(userId="me", body=create_message).execute()
-#         )
-#         # print(f'Message Id: {send_message["id"]}')
-#     except HttpError as error:
-#         print(f"An error occurred: {error}")
-#         send_message = None
-#     return send_message
 
 
 def lambda_handler(event, context):
@@ -110,17 +10,12 @@ def lambda_handler(event, context):
 
     aws_access_obj = aws_access.AwsAccess()
 
-    SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
-
     parameter_value = aws_access_obj.get_secret("mail_credentials")
 
-    # SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
+    SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
+    gmail_api = gmail_api_access.GmailAPI(SCOPES, parameter_value)
 
-    # creds = gmail_api_access.oauth(parameter_value)
-
-    gmail_api_access = gmail_api_access.GmailAPI(SCOPES, parameter_value)
-
-    aws_access_obj.update_token_in_parameter_store(creds.to_json())
+    aws_access_obj.update_token_in_parameter_store(gmail_api.creds.to_json())
 
     maxResults = 500
 
@@ -191,7 +86,7 @@ def lambda_handler(event, context):
     ]
 
     for i in query_list:
-        mails_deleted = gmail_api_access.search_and_delete(i, maxResults)
+        mails_deleted = gmail_api.search_and_delete(i, maxResults)
 
         number_of_emails_deleted = number_of_emails_deleted + mails_deleted
 
@@ -209,4 +104,4 @@ def lambda_handler(event, context):
 
     email_string = f"Number of emails deleted : {number_of_emails_deleted}\n\n{email_report_string}"
 
-    gmail_api_access.send_email(email_string)
+    gmail_api.send_email(email_string)

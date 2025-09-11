@@ -69,9 +69,6 @@ class GmailAPI:
 
                 print(seach_q, ":", number_of_emails_deleted)
 
-                # print(del_results)
-                # print()
-
             else:
                 print(f"No messages for : {seach_q}")
 
