@@ -1,7 +1,4 @@
 import boto3
-import base64
-import json
-from email.message import EmailMessage
 
 
 class AwsAccess:
