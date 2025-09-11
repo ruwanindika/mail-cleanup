@@ -12,6 +12,9 @@ build:
     - pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib -t dependencies/python/python/lib/python3.13/site-packages/
     # check whether python sytax is valid
     - python3 -m py_compile /builds/personal1741534/mail-cleanup/src/email_cleaner_lambda/lambda_function.py
+    - python3 -m py_compile /builds/personal1741534/mail-cleanup/src/email_cleaner_lambda/aws_access.py
+    - python3 -m py_compile /builds/personal1741534/mail-cleanup/src/email_cleaner_lambda/gmail_api_access.py
+    - python3 -m py_compile /builds/personal1741534/mail-cleanup/src/email_cleaner_lambda/__init__.py
   artifacts:
     exclude:
       - .git
