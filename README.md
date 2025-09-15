@@ -1,6 +1,6 @@
 # mail-cleanup
 
-![image info](images/image.png)
+![image info](images/mail-cleanup.drawio.png)
 
 # Add Docker Desktop for Mac (docker)
 
