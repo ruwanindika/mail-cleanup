@@ -1,5 +1,7 @@
 # mail-cleanup
 
+![image info](images/image.png)
+
 # Add Docker Desktop for Mac (docker)
 
 export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
