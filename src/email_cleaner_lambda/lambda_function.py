@@ -52,21 +52,21 @@ def lambda_handler(event, context):
         "from:sampathotp@sampath.lk",
         "subject: email deletion report from:ruwanindika@gmail.com to:ruwanindika@gmail.com",
         "from:carsales@mail.carsales.com.au",
-        "from:shipment-tracking@amazon.com.au",
+        "from:shipment-tracking@amazon.com.au older_than:5d",
         "from:store-news@amazon.com.au",
         "from:flybuys@edm.flybuys.com.au",
         "from:smbc_info@msg.smbc.co.jp",
         "from:myqinfo@info.chamberlain.com",
         "from:didi@jp.didiglobal.com",
-        "from:order-update@amazon.com.au older_than:15d",
+        "from:order-update@amazon.com.au older_than:5d",
         "from:estatement@info.nationstrust.com",
         "from:estatements@ndbbank.com",
         "from:newsletter@m.finder.com.au",
         "from:noreply@mail.schoolbytes.education older_than:60d",
         "from:donotreply@afterpay.com subject:Thanks for your payment! older_than:2d",
         "from:donotreply@afterpay.com subject:Payment reminder older_than:2d",
-        "from auto-confirm@amazon.com.au older_than:15d",
-        "from:no-reply@amazon.com.au older_than:15d",
+        "from auto-confirm@amazon.com.au older_than:5d",
+        "from:no-reply@amazon.com.au older_than:5d",
         "from:eBayDeals@e.deals.ebay.com.au",
         "from:qantasff@e.qantas.com",
         "from:jobs-listings@linkedin.com",
@@ -84,6 +84,7 @@ def lambda_handler(event, context):
         "from:eBay@e.reply.ebay.com.au older_than:15d",
         "from:noreply@youtube.com older_than:30d",
         "from:contacts@email.everydayrewards.com.au older_than:2d",
+        "from:noreply@ato.gov.au subject:Payment plan instalment reminder [SEC=OFFICIAL] older_than:5d"
     ]
 
     for i in query_list:
