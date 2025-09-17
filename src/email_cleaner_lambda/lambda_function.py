@@ -84,7 +84,8 @@ def lambda_handler(event, context):
         "from:eBay@e.reply.ebay.com.au older_than:15d",
         "from:noreply@youtube.com older_than:30d",
         "from:contacts@email.everydayrewards.com.au older_than:2d",
-        "from:noreply@ato.gov.au subject:Payment plan instalment reminder [SEC=OFFICIAL] older_than:5d"
+        "from:noreply@ato.gov.au subject:Payment plan instalment reminder [SEC=OFFICIAL] older_than:5d",
+        "from messaging-digest-noreply@linkedin.com older_than:30d",
     ]
 
     for i in query_list:
