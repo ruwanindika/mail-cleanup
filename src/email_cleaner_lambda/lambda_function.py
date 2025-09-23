@@ -86,6 +86,8 @@ def lambda_handler(event, context):
         "from:contacts@email.everydayrewards.com.au older_than:2d",
         "from:noreply@ato.gov.au subject:Payment plan instalment reminder [SEC=OFFICIAL] older_than:5d",
         "from messaging-digest-noreply@linkedin.com older_than:30d",
+        "from:gitlab@mg.gitlab.com older_than:30d",
+        "from:no-reply@amazonmusic.com older_than:3d",
     ]
 
     for i in query_list:
