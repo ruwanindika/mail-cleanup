@@ -20,18 +20,18 @@ def lambda_handler(event, context):
     maxResults = 500
 
     query_list = [
-        "from:info@fastimpressions.com.au",
+        "from:group-digests@linkedin.com",
         "from:ebill@dialog.lk",
         "from:openhouse-group.com",
         "from:Sandaru.Gunasekara@sgs.com",
-        "from:subscriptions@message.bloomberg.com",
+        "from:store-news@vip.kogan.com",
         "from:boconlinebanking@boc.lk",
         "from:HNBAlerts@hnb.lk",
         "from:no-reply@mail.instagram.com",
         "from:no-reply@mail.goodreads.com",
         "from:groups-noreply@linkedin.com",
         "from:flysmilesupdates@srilankan.com",
-        "from:noreply@ondemandmsg.sbs.com.au",
+        "from:noreply@couchsurfing.org",
         "from:jobalerts-noreply@linkedin.com",
         "from:velocity@e.velocityfrequentflyer.com",
         "from:newsletters@fishpond.com.au",
