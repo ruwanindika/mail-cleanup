@@ -88,7 +88,7 @@ def lambda_handler(event, context):
         "from messaging-digest-noreply@linkedin.com older_than:30d",
         "from:gitlab@mg.gitlab.com older_than:30d",
         "from:no-reply@amazonmusic.com older_than:3d",
-        "from:service@paypal.com.au older_than:30d",
+        "from:service@paypal.com.au subject:Your PayPal Pay in 4 payment went through older_than:3d",
         "from:noreply@mail.schoolbytes.education subject:BPS - No School Crossing Supervisor older_than:3d",
         "from:noreply@mail.schoolbytes.education subject:BPS - Health Alert older_than:3d",
         "from:NetBankNotification@cba.com.au subject:**** **** 3135 to Vanguard Super Pty Ltd ATF Vanguard Super older_than:3d",
