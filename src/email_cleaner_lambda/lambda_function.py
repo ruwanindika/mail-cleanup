@@ -24,7 +24,7 @@ def lambda_handler(event, context):
         "from:ebill@dialog.lk",
         "from:openhouse-group.com",
         "from:Sandaru.Gunasekara@sgs.com",
-        "from:store-news@vip.kogan.com",
+        "from:ecommerce@seylan.lk",
         "from:boconlinebanking@boc.lk",
         "from:HNBAlerts@hnb.lk",
         "from:no-reply@mail.instagram.com",
@@ -36,7 +36,7 @@ def lambda_handler(event, context):
         "from:velocity@e.velocityfrequentflyer.com",
         "from:newsletters@fishpond.com.au",
         "from:eservice@mh1.evaair.com",
-        "from:info@mailer.netflix.com",
+        "from:info@news.groupon.com.au",
         "from:comment-reply@wordpress.com",
         "from:no-reply@primevideo.com",
         "from:noreply@news.delonghi.com",
@@ -91,6 +91,7 @@ def lambda_handler(event, context):
         "from:service@paypal.com.au older_than:30d",
         "from:noreply@mail.schoolbytes.education subject:BPS - No School Crossing Supervisor older_than:3d",
         "from:noreply@mail.schoolbytes.education subject:BPS - Health Alert older_than:3d",
+        "from:NetBankNotification@cba.com.au subject:**** **** 3135 to Vanguard Super Pty Ltd ATF Vanguard Super older_than:3d",
     ]
 
     for i in query_list:
