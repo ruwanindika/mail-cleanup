@@ -92,6 +92,7 @@ def lambda_handler(event, context):
         "from:noreply@mail.schoolbytes.education subject:BPS - No School Crossing Supervisor older_than:3d",
         "from:noreply@mail.schoolbytes.education subject:BPS - Health Alert older_than:3d",
         "from:NetBankNotification@cba.com.au subject:**** **** 3135 to Vanguard Super Pty Ltd ATF Vanguard Super older_than:3d",
+        "from:noreply@my.gov.au subject:New myGov Inbox message older_than:30d",
     ]
 
     for i in query_list:
