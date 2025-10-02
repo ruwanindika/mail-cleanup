@@ -26,6 +26,7 @@ def lambda_handler(event, context):
         "from:sgs.com",
         "from:ecommerce@seylan.lk",
         "from:boconlinebanking@boc.lk",
+        "from:bocmail1@boc.lk",
         "from:HNBAlerts@hnb.lk",
         "from:no-reply@mail.instagram.com",
         "from:no-reply@mail.goodreads.com",
