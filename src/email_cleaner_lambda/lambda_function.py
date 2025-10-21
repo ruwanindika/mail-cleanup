@@ -33,7 +33,7 @@ def lambda_handler(event, context):
         "from:no-reply@mail.goodreads.com",
         "from:groups-noreply@linkedin.com",
         "from:flysmilesupdates@srilankan.com",
-        "from:noreply@couchsurfing.org",
+        "from:q-letter@hrdkorea.or.kr",
         "from:jobalerts-noreply@linkedin.com",
         "from:velocity@e.velocityfrequentflyer.com",
         "from:newsletters@fishpond.com.au",
