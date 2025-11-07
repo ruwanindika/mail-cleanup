@@ -10,13 +10,12 @@ class AwsAccess:
     def send_email_aws(self, body_text):
 
         sender_email = "ruwanindika@gmail.com"
-        recipient_email = "recipient@example.com"
         subject = "Email deletion report"
 
         try:
             response = self.ses_client.send_email(
                 Source=sender_email,
-                Destination={"ToAddresses": ["ruwanindika@gmail.com"]},
+                Destination={"ToAddresses": [sender_email]},
                 Message={
                     "Subject": {"Data": subject},
                     "Body": {"Text": {"Data": body_text}},
