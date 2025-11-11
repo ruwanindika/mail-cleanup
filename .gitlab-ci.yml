@@ -9,7 +9,9 @@ default:
 test:
   stage: test
   script:
+    - mkdir testenv
     - cd testenv
+    - python3 -m venv myenv
     - source myenv/bin/activate
     - pip install moto
     - pytest
