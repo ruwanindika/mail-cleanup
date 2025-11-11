@@ -1,5 +1,5 @@
 # Use a base Ubuntu image
-FROM ubuntu:latest
+FROM ubuntu:jammy
 
 # Update packages and install necessary dependencies
 RUN apt-get update && \

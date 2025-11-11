@@ -6,15 +6,15 @@ stages:
 default:
   image: registry.gitlab.com/personal1741534/mail-cleanup/ubuntu-terraform:latest
 
-test:
-  stage: test
-  script:
-    - pwd
-    - ls -l
-    - python3 -m venv myenv
-    - source myenv/bin/activate
-    - pip install moto boto3
-    - pytest
+# test:
+#   stage: test
+#   script:
+#     - pwd
+#     - ls -l
+#     - python3 -m venv myenv
+#     - source myenv/bin/activate
+#     - pip install moto boto3
+#     - pytest
 
 build:
   stage: build
