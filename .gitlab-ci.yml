@@ -11,7 +11,9 @@ test:
   script:
     - pwd
     - ls -l
-    - pip install moto
+    - python3 -m venv myenv
+    - source myenv/bin/activate
+    - pip install moto boto3
     - pytest
 
 build:
