@@ -11,10 +11,7 @@ test:
   script:
     - pwd
     - ls -l
-    - python3 -m venv myenv
-    - source myenv/bin/activate
     - pip install moto
-    - cd /builds/personal1741534/mail-cleanup/
     - pytest
 
 build:
