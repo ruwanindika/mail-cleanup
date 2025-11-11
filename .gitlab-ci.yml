@@ -1,9 +1,18 @@
 stages:
   - build
   - deploy
+  - test
 
 default:
   image: registry.gitlab.com/personal1741534/mail-cleanup/ubuntu-terraform:latest
+
+test:
+  stage: test
+  script:
+    - cd testenv/
+    - source myenv/bin/activate
+    - pip install moto
+    - pytest
 
 build:
   stage: build

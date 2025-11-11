@@ -6,7 +6,7 @@
 
 export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
 
-# Docker commandsopen -a Docker
+# Docker commands
 
 ```
 open -a Docker #for Mac
