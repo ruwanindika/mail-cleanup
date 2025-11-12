@@ -1,6 +1,7 @@
+import json
+
 import boto3
 from moto import mock_aws
-import json
 
 import email_cleaner_lambda.aws_access as aws_access
 

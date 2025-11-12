@@ -25,3 +25,9 @@ docker push registry.gitlab.com/personal1741534/mail-cleanup/ubuntu-terraform
 ```
 pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib -t .
 ```
+
+# pytest coverage command
+
+```
+pytest --cov-report=html --cov=src .
+```

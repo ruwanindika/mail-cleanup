@@ -7,9 +7,8 @@ class AwsAccess:
         self.ssm_client = boto3.client("ssm")
         self.ses_client = boto3.client("ses")
 
-    def send_email_aws(self, body_text,sender_email = "ruwanindika@gmail.com"):
+    def send_email_aws(self, body_text, sender_email="ruwanindika@gmail.com"):
 
-        
         subject = "Email deletion report"
 
         try:
@@ -27,7 +26,9 @@ class AwsAccess:
             print(f"Error sending email: {e}")
             return {"statusCode": 500, "body": f"Error sending email: {e}"}
 
-    def update_token_in_parameter_store(self, new_value, parameter_name="mail_credentials"):
+    def update_token_in_parameter_store(
+        self, new_value, parameter_name="mail_credentials"
+    ):
 
         parameter_type = "SecureString"
 
@@ -56,9 +57,7 @@ class AwsAccess:
             parameter_value = response["Parameter"]["Value"]
         except self.ssm_client.exceptions.ParameterNotFound:
             parameter_value = f"Parameter '{parameter_name}' not found."
-            print(parameter_value)
         except Exception as e:
             parameter_value = f"Error retrieving parameter: {e}"
-            print(parameter_value)
 
         return parameter_value
